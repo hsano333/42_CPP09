@@ -1,42 +1,42 @@
-NAME:= btc
-LIB:= ./lib/
-OBJDIR:= ./obj
-SRCDIR:= ./srcs/
-SRC:= main.cpp BitcoinExchange.cpp
-ENTRY:= 
+NAME	:= btc
+LIB		:= ./lib/
+OBJDIR	:= ./obj
+SRCDIR	:= ./srcs/
+SRC		:= main.cpp BitcoinExchange.cpp
+ENTRY	:= 
 
-INCS:= ./include
-IFLAGS:= $(addprefix -I,$(INCS))
-SRCS:= $(addprefix $(SRCDIR), $(SRC))
-OBJS:= $(SRCS:.cpp=.o)
-OBJECTS:= $(addprefix $(OBJDIR)/, $(SRC:.cpp=.o))
-DEPS:= $(OBJECTS:.o=.d)
+INCS	:= ./include
+IFLAGS	:= $(addprefix -I,$(INCS))
+SRCS	:= $(addprefix $(SRCDIR), $(SRC))
+OBJS	:= $(SRCS:.cpp=.o)
+OBJECTS	:= $(addprefix $(OBJDIR)/, $(SRC:.cpp=.o))
+DEPS	:= $(OBJECTS:.o=.d)
 
-CXX:= c++
-CXXFLAGS:= -Wall -Wextra -Werror -std=c++98
+CXX			:= c++
+CXXFLAGS	:= -Wall -Wextra -Werror -std=c++98
 
 all:
-@make $(NAME)
+	@make $(NAME)	
 
-$(NAME):$(OBJECTS) | $(OBJDIR)
-$(CXX)  $(OBJECTS) -o $@
+$(NAME)	:	$(OBJECTS) | $(OBJDIR)
+		$(CXX)  $(OBJECTS) -o $@
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.cpp | $(OBJDIR)
-$(CXX) $(CXXFLAGS) $(IFLAGS) -c $< -MMD -MP -MF $(OBJDIR)/$*.d  -o $@
+	$(CXX) $(CXXFLAGS) $(IFLAGS) -c $< -MMD -MP -MF $(OBJDIR)/$*.d  -o $@
 
 $(OBJDIR) :
-@mkdir $(OBJDIR)
+	@mkdir $(OBJDIR)
 
-clean:
-$(RM) -r $(OBJDIR)
+clean	:
+			$(RM) -r $(OBJDIR)
 
-fclean:clean
-$(RM) $(NAME)
+fclean	:	clean
+			$(RM) $(NAME)
 
-re:fclean all
+re	:		fclean all
 
-bonus:
-@make WITH_BONUS=1
+bonus	:	
+			@make WITH_BONUS=1
 
 ifeq ($(findstring clean,$(MAKECMDGOALS)),)
 -include $(DEPS)
