@@ -4,6 +4,7 @@
 #include <cstdio>
 #include <stdlib.h>
 #include <ios>
+#include <iomanip>
 
 using std::map;
 using std::time_t;
@@ -63,6 +64,42 @@ string BitcoinExchange::convert_value(string buf, string delimiter)
     return (buf.substr(pos+delimiter.size()));
 }
 
+bool BitcoinExchange::is_leap_year(int year)
+{
+    if (year % 4 == 0)
+    {
+        if (year % 100 == 0)
+        {
+            if (year % 400 == 0)
+                return (true);
+            return (false);
+        }
+        return (true);
+    }
+    return (false);
+}
+
+bool BitcoinExchange::is_valid_date(int year, int month, int day)
+{
+    int last_day_array[] = {0,31,29,31,30,31,30,31,31,30,31,30,31};
+    int last_day = last_day_array[month];
+
+    //cout << "is_valid_date No.1 year=" << year << ", month=" << month << ", day" << day << endl;
+    if (day > last_day)
+        return (false);
+    //cout << "is_valid_date No.2 year=" << year << ", month=" << month << ", day" << day << endl;
+    if (month == 2 && day == 29)
+    {
+    //cout << "is_valid_date No.3 year=" << year << ", month=" << month << ", day" << day << ",leap year=" << is_leap_year(year) << endl;
+         if(is_leap_year(year))
+             return (true);
+         else
+             return (false);
+    }
+    //cout << "is_valid_date No.4 year=" << year << ", month=" << month << ", day" << day << endl;
+    return (true);
+}
+
 time_t BitcoinExchange::convert_date(string buf, string delimiter)
 {
     long year, month, day;
@@ -107,6 +144,8 @@ time_t BitcoinExchange::convert_date(string buf, string delimiter)
             throw std::exception();
         if (day <= 0 || month > 31)
             throw std::exception();
+        if(!this->is_valid_date(year, month, day))
+            throw std::exception();
     } 
     catch (exception &e)
     {
@@ -115,9 +154,11 @@ time_t BitcoinExchange::convert_date(string buf, string delimiter)
     }
     struct tm tmp_date={};
     tmp_date.tm_year = year - 1900;
-    tmp_date.tm_mon = month -1;
+    tmp_date.tm_mon = month - 1;
     tmp_date.tm_mday = day;
 
+    //if (mktime(&tmp_date) < 0)
+        //cout << "mktime error:" << buf << endl;
     return (mktime(&tmp_date));
 }
 
@@ -137,7 +178,7 @@ void BitcoinExchange::load_database()
     //ignore header
     getline(dbfile, buf);
     time_t tmp_date;
-    string tmp_value;
+    string tmp_value = "0";
     string delimiter = ",";
     while (!dbfile.eof())
     {
@@ -169,6 +210,8 @@ time_t BitcoinExchange::search_date(time_t date)
         }
     }
 
+    if (ite == end)
+        ite--;
     return (*ite).first;
 }
 
@@ -180,48 +223,47 @@ string BitcoinExchange::calc(string rate, string input_value)
     stringstream ss;
     ss.clear();
 
-    cout << "calc No.1" << endl;
+    //cout << "calc() No.1" << endl;
     if (rate.find(".") || input_value.find("."))
     {
-        try{
-    cout << "calc No.2" << endl;
+        //try{
+        //cout << "calc() No.2" << endl;
             double rate_val = strtod(rate.c_str(), &endptr);
-            if (rate_val >= 1000)
-                throw std::range_error("Error: too large a number.");
-            else if (errno == ERANGE)
+        //cout << "calc() No.3:" << rate_val << endl;
+            //cout << rate_val << endl;
+            //if (rate_val >= max)
+            //{
+                //throw std::range_error("Error: too large a number. No.3");
+            //}
+            if (errno == ERANGE)
                 throw std::range_error("Error: out of range");
             else if (*endptr != '\0')
                 throw std::exception();
             else if (rate_val <= 0)
                 throw std::range_error("Error: not a positive number.");
-    cout << "calc No.3m input_value=" << input_value << endl;
             double input_val = strtod(input_value.c_str(), &endptr);
-    cout << "calc No.4m input_value=" << input_value << endl;
             if (input_val >= 1000)
-                throw std::range_error("Error: too large a number.");
+                throw std::range_error("Error: too large a number. No.4");
             else if (errno == ERANGE)
                 throw std::range_error("Error: out of range");
             else if (*endptr != '\0')
                 throw std::exception();
             else if (input_val <= 0)
                 throw std::range_error("Error: not a positive number.");
-            ss << rate_val * input_val;
-            cout << "calc No.5 input_value=" << input_value << "rval=" << ss.str() << endl;
+            ss  << std::fixed << std::setprecision(3) << rate_val * input_val;
             return (ss.str());
-        }catch (exception &e){
-            cout << "calc error No.100" << endl;
-            cout << e.what() << endl;
-        }
+        //}catch (exception &e){
+            //cout << e.what() << endl;
+        //}
 
     }
     else
     {
-    cout << "calc No.5" << endl;
-        try{
+        //try{
             long rate_val = strtol(rate.c_str(), &endptr, base);
-            if (rate_val >= 1000)
-                throw std::range_error("Error: too large a number.");
-            else if (errno == ERANGE)
+            //if (rate_val >= max)
+                //throw std::range_error("Error: too large a number. No.1");
+            if (errno == ERANGE)
                 throw std::range_error("Error: out of range");
             else if (*endptr != '\0')
                 throw std::exception();
@@ -229,20 +271,18 @@ string BitcoinExchange::calc(string rate, string input_value)
                 throw std::range_error("Error: not a positive number.");
             long input_val= strtol(input_value.c_str(), &endptr, base);
             if (input_val >= 1000)
-                throw std::range_error("Error: too large a number.");
+                throw std::range_error("Error: too large a number. No.2");
             else if (errno == ERANGE)
                 throw std::range_error("Error: out of range");
             else if (*endptr != '\0')
                 throw std::exception();
             else if (input_val <= 0)
                 throw std::range_error("Error: not a positive number.");
-            ss << rate_val * input_val;
-            cout << "calc No.10 input_value=" << input_value << "rval=" << ss.str() << endl;
+            ss  << std::fixed << std::setprecision(3) << rate_val * input_val;
             return (ss.str());
-        }catch (exception &e){
-            cout << "calc error No.100" << endl;
-            cout << e.what() << endl;
-        }
+        //}catch (exception &e){
+            //cout << e.what() << endl;
+        //}
 
     }
     return (rval);
@@ -278,11 +318,18 @@ void BitcoinExchange::display_exchanged_rate(std::string input_file_path)
         input_value = this->convert_value(buf, delimiter);
         if (input_value == "")
             continue;
-        cout << "input_date=" << input_date << ",input_value=" << input_value << endl;
         indicated_date = this->search_date(input_date);
         rate_str = this->database.at(indicated_date);
-        exchanged_rate = this->calc(rate_str, input_value);
-        cout << buf.substr(0, buf.find(delimiter)) << " => " << input_value << " = " << exchanged_rate << endl;
+        //cout << "indicated_date:" << indicated_date << ", rate_str=" << rate_str << endl;
+        try
+        {
+            exchanged_rate = this->calc(rate_str, input_value);
+            cout << buf.substr(0, buf.find(delimiter)) << " => " << input_value << " = " << exchanged_rate << endl;
+        }
+        catch (std::exception &e)
+        {
+            cout << e.what() << endl;
+        }
     }
     //(void)input_file;
 }

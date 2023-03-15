@@ -19,4 +19,6 @@ class BitcoinExchange
         std::time_t search_date(std::time_t date);
         std::string calc(std::string rate, std::string input_value);
         std::map<std::time_t , std::string> database;
+        bool is_valid_date(int year, int month, int day);
+        bool is_leap_year(int year);
 };
