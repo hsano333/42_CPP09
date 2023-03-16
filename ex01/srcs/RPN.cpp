@@ -110,7 +110,7 @@ void Rpn::check_overflow(ssize_t a, ssize_t b, char c_operator)
                 a *= -1;
             if (b < 0)
                 b *= -1;
-            if (result > 0 && (numeric_limits<ssize_t>::max() / a) < b)
+            if (result != 0 && (numeric_limits<ssize_t>::max() / a) < b)
                 throw std::range_error("Error:Over Flow operator*");
         }
     }
@@ -119,7 +119,7 @@ void Rpn::check_overflow(ssize_t a, ssize_t b, char c_operator)
 ssize_t Rpn::calc_operator(ssize_t a, ssize_t b, char c)
 {
     ssize_t result = 0;
-    //std::cout << "a=" << a << ", b=" << b << ",c=" << (int)c << std::endl;
+
     switch(c)
     {
         case '+':
@@ -166,7 +166,6 @@ ssize_t Rpn::calc(string& str)
             space_flag = false;
         }
         else if (space_flag && this->is_operator(c))
-        //else if (space_flag)
         {
             b = stack.top();
             stack.pop();
@@ -183,6 +182,4 @@ ssize_t Rpn::calc(string& str)
     if (stack.size() != 1)
         throw std::exception();
     return (stack.top());
-    
-
 }
