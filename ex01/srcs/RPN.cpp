@@ -167,6 +167,8 @@ ssize_t Rpn::calc(string& str)
         }
         else if (space_flag && this->is_operator(c))
         {
+            if (stack.size() <= 1)
+                throw std::exception();
             b = stack.top();
             stack.pop();
             a = stack.top();

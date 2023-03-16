@@ -23,9 +23,11 @@ int main(int argc, char **argv)
             int i=1;
             while (i < argc)
             {
-                tmp += argv[1];
+                tmp += argv[i];
+                tmp += " ";
                 i++;
             }
+            //cout << "tmp=" << tmp << endl;
             result = rpn.calc(tmp);
         }
         cout << result << endl;
