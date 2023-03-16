@@ -1,3 +1,6 @@
+#ifndef BITCOINEXCHANGE_H
+#define BITCOINEXCHANGE_H
+
 #include <map>
 #include <ctime>
 #include <sstream>
@@ -22,3 +25,4 @@ class BitcoinExchange
         bool is_valid_date(int year, int month, int day);
         bool is_leap_year(int year);
 };
+#endif
