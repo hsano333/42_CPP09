@@ -1,6 +1,7 @@
 #include "RPN.hpp"
 #include <iostream>
 #include <vector>
+#include <stdlib.h>
 using std::string;
 using std::stack;
 using std::cout;
@@ -37,9 +38,11 @@ int main(int argc, char **argv)
     }
     catch(std::range_error &e){
         cout << e.what() << endl;
+        return (EXIT_FAILURE);
     }
     catch(std::exception &e){
         cout << "Error" << endl;
+        return (EXIT_FAILURE);
     }
 
     return (0);

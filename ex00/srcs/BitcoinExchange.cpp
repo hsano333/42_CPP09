@@ -54,7 +54,6 @@ BitcoinExchange& BitcoinExchange::operator=(const BitcoinExchange &bce)
 
 string BitcoinExchange::convert_value(string buf, string delimiter)
 {
-
     size_t pos = buf.find(delimiter);
     if (pos == string::npos)
     {

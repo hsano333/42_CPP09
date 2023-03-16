@@ -148,7 +148,7 @@ ssize_t Rpn::calc_operator(ssize_t a, ssize_t b, char c)
 
 ssize_t Rpn::calc(string& str)
 {
-    bool space_flag = true;
+    //bool space_flag = true;
     //string str = this->literial;
     std::stack<ssize_t> stack;
     ssize_t a;
@@ -159,13 +159,17 @@ ssize_t Rpn::calc(string& str)
     {
         c = str[i];
         if(str[i] == ' ')
-            space_flag = true;
-        else if (space_flag && isdigit(c))
+        {
+            //space_flag = true;
+        }
+        //else if (space_flag && isdigit(c))
+        else if (isdigit(c))
         {
             stack.push((c - '0'));
-            space_flag = false;
+            //space_flag = false;
         }
-        else if (space_flag && this->is_operator(c))
+        //else if (space_flag && this->is_operator(c))
+        else if (this->is_operator(c))
         {
             if (stack.size() <= 1)
                 throw std::exception();
@@ -176,7 +180,7 @@ ssize_t Rpn::calc(string& str)
             result = calc_operator(a, b, c);
             stack.push(result);
             //stack.push(str.substr(i, 1));
-            space_flag = false;
+            //space_flag = false;
         }
         else
             throw std::exception();
