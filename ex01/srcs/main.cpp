@@ -45,5 +45,20 @@ int main(int argc, char **argv)
         return (EXIT_FAILURE);
     }
 
+    std::vector<size_t> test1;
+    std::vector<size_t> test2;
+
+    test1.push_back(1);
+    test1.push_back(2);
+    test1.push_back(3);
+    test1.push_back(4);
+    test1.push_back(5);
+    test2.push_back(10);
+    test2.push_back(11);
+    test2.push_back(12);
+    test2.push_back(13);
+    test2.push_back(14);
+    size_t tmp = 1;
+    test1.insert(test1.begin()+2,tmp); 
     return (0);
 }

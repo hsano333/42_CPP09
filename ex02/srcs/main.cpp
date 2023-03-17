@@ -9,13 +9,15 @@ using std::endl;
 
 int main(int argc, char **argv)
 {
-    size_t size = argc / 100;
+    size_t size = argc / 128;
     double unit =  (1000000 / CLOCKS_PER_SEC);
-    if (size == 0)
-        size = argc / 2;
+    if (argc < 8)
+        size = 1;
+    else
+        size = argc / 4;
 
     PmergeMe pmerge;
-    if (argc <= 2)
+    if (argc <= 1)
     {
         cout << "Error" << endl;
         return (EXIT_FAILURE);
@@ -41,20 +43,18 @@ int main(int argc, char **argv)
     }
     cout << "Before:    ";
     pmerge.print_all();
-    cout << endl;
     clock_t vector_clock = pmerge.sort(VECTOR, size);
     clock_t list_clock = pmerge.sort(LIST, size);
     cout << "After :    ";
-    pmerge.print_all();
-    cout << endl;
+    pmerge.print_all_sorted();
 
     cout << "Time to process a range of ";
-    cout << pmerge.size() << "elements with std::[Vector] : ";
+    cout << pmerge.size() << " elements with std::[Vector] : ";
     cout << std::fixed << std::setprecision(0) << vector_clock * unit << " us" << endl;
     //cout << vector_clock << " us" << endl;
 
     cout << "Time to process a range of ";
-    cout << pmerge.size() << "elements with std::[List]   : ";
+    cout << pmerge.size() << " elements with std::[List]   : ";
     cout << std::fixed << std::setprecision(0) << list_clock * unit << " us" << endl;
 
     clock_t test = clock();
