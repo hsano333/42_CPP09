@@ -71,36 +71,18 @@ void PmergeMe::push(size_t value)
     this->list.push_back(value);
 }
 
-std::vector<size_t>* insert_sort_in_vector(const std::vector<size_t>* vec)
+std::vector<size_t>* insert_sort_in_vector(std::vector<size_t>* vec)
 {
-    cout << "insert_sort_in_vector No.1" << endl;
-    std::vector<size_t> *tmp = new std::vector<size_t>;
-    //std::vector<size_t>::const_iterator src_ite = vec->begin();
     std::vector<size_t>::const_iterator ite = vec->begin();
     std::vector<size_t>::const_iterator end = vec->end();
     std::vector<size_t>::iterator insert_ite;
 
-
-    /*
+    if (vec->size() <= 1)
     {
-        cout << "test insert sort before" << endl;
-        std::vector<size_t>::const_iterator ite2 = vec->begin();
-        std::vector<size_t>::const_iterator end2 = vec->end();
-        while (ite2 != end2)
-        {
-            cout << *ite2 << endl;
-            ite2++;
-        }
+        return vec;
     }
-    */
-    if (vec->size() == 0)
-        return (tmp);
+    std::vector<size_t> *tmp = new std::vector<size_t>;
     tmp->push_back(*ite);
-    if (vec->size() == 1)
-    {
-        //tmp->push_back(*ite);
-        return (tmp);
-    }
     ++ite;
     if (tmp->at(0) < *ite)
         tmp->push_back(*ite);
@@ -110,46 +92,18 @@ std::vector<size_t>* insert_sort_in_vector(const std::vector<size_t>* vec)
     while(ite != end)
     {
         size_t i = 0;
-    cout << "insert_sort_in_vector No.2 ite=" << *ite << endl;
         for (i = 1;i<tmp->size();i++)
         {
-    cout << "insert_sort_in_vector No.3" << endl;
-            //if (tmp->size() < 2)
-                //break;
-    cout << "insert_sort_in_vector No.4" << endl;
             if ((*tmp)[i-1] < *ite && *ite <= (*tmp)[i])
                 break;
-    cout << "insert_sort_in_vector No.5" << endl;
         }
-        //size_t test = 1;
-        //tmp->insert(test, i);
-        //tmp->insert(ite, *src_ite);
 
-    cout << "insert_sort_in_vector No.6" << endl;
         insert_ite = tmp->begin();
         insert_ite += i;
-    cout << "insert_sort_in_vector No.7: *ite=" << *ite << endl;
         tmp->insert(insert_ite, *ite);
-    cout << "insert_sort_in_vector No.8" << endl;
-        //src_ite++;
         ite++;
     }
-    cout << "insert_sort_in_vector No.9" << endl;
-    cout << "insert_sort_in_vector No.10" << endl;
     delete vec;
-    {
-        cout << "test insert sort after" << endl;
-        std::vector<size_t>::const_iterator ite2 = tmp->begin();
-        std::vector<size_t>::const_iterator end2 = tmp->end();
-        while (ite2 != end2)
-        {
-            cout << *ite2 << endl;
-            ite2++;
-
-        }
-        cout << "test insert sort after end" << endl;
-    }
-    //vec = tmp;
     return (tmp);
 }
 
@@ -249,7 +203,7 @@ void PmergeMe::repeat_merge_sort_in_vector(std::vector<std::vector<size_t>* >& d
 {
     size_t base_size = this->vector.size();
     std::vector<size_t>* tmp;
-        cout << "repeat_merge_sort_in_vector No.1 base_size=" << base_size << ", first_size=" << (*divided.begin())->size() << endl;
+    cout << "repeat_merge_sort_in_vector No.1 base_size=" << base_size << ", first_size=" << (*divided.begin())->size() << endl;
     std::vector<std::vector<size_t>* >::iterator end = divided.end();
     std::vector<std::vector<size_t>* >::iterator ite = divided.begin();
     while (base_size != (*divided.begin())->size())
@@ -316,7 +270,6 @@ clock_t PmergeMe::sort_in_vector(size_t size)
     std::transform(divided.begin(),divided.end(),divided.begin(), insert_sort_in_vector);
     repeat_merge_sort_in_vector(divided);
 
-    std::transform(divided.begin(),divided.end(),divided.begin(), clear_vector);
     end_time = clock();
     return (end_time - begin_time);
 }
