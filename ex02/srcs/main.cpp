@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.cpp                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hsano <hsano@student.42tokyo.jp>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/18 17:08:36 by hsano             #+#    #+#             */
+/*   Updated: 2023/03/18 17:10:34 by sano             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 
 #include "PmergeMe.hpp"
 #include <iostream>
@@ -49,13 +61,9 @@ int main(int argc, char **argv)
     cout << "Before:    ";
     pmerge.print_all(LIST);
     clock_t vector_clock = pmerge.sort(VECTOR, size);
-    std::string tmp_str = "testtmp No.3=";
-    PmergeMe::print_vector(tmp_str, *(pmerge.sorted_vector));
     clock_t list_clock = pmerge.sort(LIST, size);
-     tmp_str = "testtmp No.4=";
-    PmergeMe::print_vector(tmp_str, *(pmerge.sorted_vector));
     cout << "After :    ";
-    pmerge.print_all_sorted(VECTOR);
+    pmerge.print_all_sorted(LIST);
     pmerge.check_sort();
 
     cout << "Time to process a range of ";

@@ -29,10 +29,10 @@ class PmergeMe
         bool check_sort();
         static void print_vector(std::string &str, std::vector<size_t> &vec) ;
         static void print_list(std::string &str, std::list<size_t> &lst);
-        std::vector<size_t> *sorted_vector;
     private:
         std::vector<size_t> vector;
         std::list<size_t> list;
+        std::vector<size_t> *sorted_vector;
         std::list<size_t> *sorted_list;
         clock_t sort_in_vector(size_t size);
         clock_t sort_in_list(size_t size);
