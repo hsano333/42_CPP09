@@ -28,6 +28,10 @@ PmergeMe& PmergeMe::operator=(const PmergeMe& pmerge)
 
     this->vector.clear();
     this->list.clear();
+    if (this->sorted_vector)
+        delete this->sorted_vector;
+    if (this->sorted_list)
+        delete this->sorted_list;
     std::vector<size_t>::const_iterator ite_v = pmerge.vector.begin();
     std::vector<size_t>::const_iterator end_v = pmerge.vector.end();
     std::list<size_t>::const_iterator ite_l = pmerge.list.begin();
@@ -257,14 +261,6 @@ clock_t PmergeMe::sort_in_vector(size_t size)
     std::transform(divided.begin(),divided.end(),divided.begin(), insert_sort_in_vector);
     repeat_merge_sort_in_vector(divided);
     std::transform(++divided.begin(),divided.end(),divided.begin(), clear_vector);
-    /*
-    for (size_t i=0;i<divided.size();i++)
-    {
-        delete divided[i];
-        divided[i] = NULL;
-
-    }
-    */
 
     end_time = clock();
     return (end_time - begin_time);
@@ -480,23 +476,23 @@ clock_t PmergeMe::sort_in_list(size_t size)
 clock_t PmergeMe::sort(Container container, size_t size)
 {
     clock_t clock = 0;
-    if (this->sorted_vector)
-    {
-        delete this->sorted_vector;
-        this->sorted_vector = NULL;
-    }
-    if (this->sorted_list)
-    {
-        delete this->sorted_list;
-        this->sorted_list = NULL;
-    }
 
     if (container == VECTOR)
     {
+        if (this->sorted_vector)
+        {
+            delete this->sorted_vector;
+            this->sorted_vector = NULL;
+        }
         clock = sort_in_vector(size);
     }
     else if (container == LIST)
     {
+        if (this->sorted_list)
+        {
+            delete this->sorted_list;
+            this->sorted_list = NULL;
+        }
         clock = sort_in_list(size);
     }
     return (clock);
