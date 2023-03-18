@@ -6,7 +6,7 @@
 /*   By: hsano <hsano@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 17:08:36 by hsano             #+#    #+#             */
-/*   Updated: 2023/03/18 22:00:15 by sano             ###   ########.fr       */
+/*   Updated: 2023/03/18 22:04:54 by sano             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,10 +68,10 @@ int main(int argc, char **argv)
     cout << "Before:    ";
     pmerge.print_all(VECTOR);
     clock_t vector_clock = pmerge.sort(VECTOR, size);
-    //clock_t list_clock = pmerge.sort(LIST, size);
-    clock_t list_clock = 0;
+    clock_t list_clock = pmerge.sort(LIST, size);
+    //clock_t list_clock = 0;
     cout << "After :    ";
-    pmerge.print_all_sorted(VECTOR);
+    pmerge.print_all_sorted(LIST);
     pmerge.check_sort();
 
     cout << "Time to process a range of ";
