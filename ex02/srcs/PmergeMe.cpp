@@ -12,6 +12,8 @@ PmergeMe::PmergeMe() : sorted_vector(NULL) , sorted_list(NULL)
 }
 PmergeMe::~PmergeMe()
 {
+    delete sorted_vector;
+    delete sorted_list;
 }
 PmergeMe::PmergeMe(const PmergeMe& merge) : sorted_vector(NULL) , sorted_list(NULL)
 {
@@ -174,6 +176,7 @@ std::vector<size_t>* PmergeMe::merge_sort_in_vector(std::vector<size_t>* vec1, s
 
 void PmergeMe::make_divided_vector(std::vector<std::vector<size_t>* >& divided, size_t size)
 {
+    cout << "make divided vector:" << size << endl;
     for(size_t i=0;i<divided.size();i++)
     {
         divided[i] = new std::vector<size_t>;
@@ -269,6 +272,12 @@ clock_t PmergeMe::sort_in_vector(size_t size)
     make_divided_vector(divided, size);
     std::transform(divided.begin(),divided.end(),divided.begin(), insert_sort_in_vector);
     repeat_merge_sort_in_vector(divided);
+
+    for(size_t i=0;i<divided.size();i++)
+    {
+        delete divided[i];
+
+    }
 
     end_time = clock();
     return (end_time - begin_time);
