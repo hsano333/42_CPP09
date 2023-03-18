@@ -8,6 +8,11 @@ using std::cout;
 using std::endl;
 using std::vector;
 
+#include <stdio.h>
+__attribute__((destructor)) void f(void){
+    system("leaks RPN");
+}
+
 int main(int argc, char **argv)
 {
     Rpn rpn;

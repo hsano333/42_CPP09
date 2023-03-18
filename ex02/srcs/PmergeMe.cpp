@@ -7,20 +7,22 @@ using std::vector;
 using std::list;
 
 
-PmergeMe::PmergeMe()
+PmergeMe::PmergeMe() : sorted_vector(NULL) , sorted_list(NULL)
 {
 }
 PmergeMe::~PmergeMe()
 {
 }
-PmergeMe::PmergeMe(const PmergeMe& merge)
+PmergeMe::PmergeMe(const PmergeMe& merge) : sorted_vector(NULL) , sorted_list(NULL)
 {
     *this = merge;
 }
+
 PmergeMe& PmergeMe::operator=(const PmergeMe& pmerge)
 {
     if (this != &pmerge)
         return (*this);
+
     this->vector.clear();
     this->list.clear();
     std::vector<size_t>::const_iterator ite_v = pmerge.vector.begin();
@@ -35,6 +37,31 @@ PmergeMe& PmergeMe::operator=(const PmergeMe& pmerge)
     {
         this->vector.push_back(*ite_l);
     }
+
+    if (pmerge.sorted_vector)
+    {
+        this->sorted_vector = new std::vector<size_t>;
+        ite_v = pmerge.sorted_vector->begin();
+        end_v = pmerge.sorted_vector->end();
+        while (ite_v != end_v)
+        {
+            this->sorted_vector->push_back(*ite_v);
+            ite_v++;
+        }
+    }
+    if (pmerge.sorted_list)
+    {
+        this->sorted_list = new std::list<size_t>;
+        ite_l = pmerge.sorted_list->begin();
+        end_l = pmerge.sorted_list->end();
+        while (ite_l != end_l)
+        {
+            this->sorted_list->push_back(*ite_l);
+            ite_l++;
+        }
+    }
+    //this->sort_in_vector = pmerge.sort_in_vector;
+    //this->sort_in_list = pmerge.sort_in_list;
     return (*this);
 }
 
@@ -124,6 +151,12 @@ std::vector<size_t>* insert_sort_in_vector(const std::vector<size_t>* vec)
     }
     //vec = tmp;
     return (tmp);
+}
+
+std::vector<size_t>* clear_vector(const std::vector<size_t>* vec)
+{
+    delete vec;
+    return (NULL);
 }
 
 std::vector<size_t>* PmergeMe::merge_sort_in_vector(std::vector<size_t>* vec1, std::vector<size_t>* vec2)
@@ -278,16 +311,12 @@ clock_t PmergeMe::sort_in_vector(size_t size)
     clock_t end_time;
     begin_time = clock();
 
-    cout << "sort_in_vector No.1" << endl;
     std::vector<std::vector<size_t>* > divided(this->vector.size()/size + 1);
-    cout << "sort_in_vector No.2" << endl;
     make_divided_vector(divided, size);
-    cout << "sort_in_vector No.3" << endl;
     std::transform(divided.begin(),divided.end(),divided.begin(), insert_sort_in_vector);
-    cout << "sort_in_vector No.4" << endl;
     repeat_merge_sort_in_vector(divided);
-    cout << "sort_in_vector No.5" << endl;
 
+    std::transform(divided.begin(),divided.end(),divided.begin(), clear_vector);
     end_time = clock();
     return (end_time - begin_time);
 }

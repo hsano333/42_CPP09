@@ -9,6 +9,11 @@ using std::endl;
 using std::map;
 using std::exception;
 
+#include <stdio.h>
+__attribute__((destructor)) void f(void){
+    system("leaks btc");
+}
+
 int main(int argc, char **argv)
 {
     if (argc != 2)

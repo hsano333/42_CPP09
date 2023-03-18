@@ -7,6 +7,11 @@
 using std::cout;
 using std::endl;
 
+#include <stdio.h>
+__attribute__((destructor)) void f(void){
+    system("leaks PmergeMe");
+}
+
 int main(int argc, char **argv)
 {
     size_t size = argc / 128;
