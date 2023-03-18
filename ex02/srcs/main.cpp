@@ -47,11 +47,16 @@ int main(int argc, char **argv)
         i++;
     }
     cout << "Before:    ";
-    pmerge.print_all();
+    pmerge.print_all(LIST);
     clock_t vector_clock = pmerge.sort(VECTOR, size);
+    std::string tmp_str = "testtmp No.3=";
+    PmergeMe::print_vector(tmp_str, *(pmerge.sorted_vector));
     clock_t list_clock = pmerge.sort(LIST, size);
+     tmp_str = "testtmp No.4=";
+    PmergeMe::print_vector(tmp_str, *(pmerge.sorted_vector));
     cout << "After :    ";
-    pmerge.print_all_sorted();
+    pmerge.print_all_sorted(VECTOR);
+    pmerge.check_sort();
 
     cout << "Time to process a range of ";
     cout << pmerge.size() << " elements with std::[Vector] : ";
@@ -62,7 +67,4 @@ int main(int argc, char **argv)
     cout << pmerge.size() << " elements with std::[List]   : ";
     cout << std::fixed << std::setprecision(0) << list_clock * unit << " us" << endl;
 
-    clock_t test = clock();
-    cout << "test: per_sec=" << CLOCKS_PER_SEC << ", unit=" << unit << endl;
-    cout << "test: clock=" << test << endl;
 }
