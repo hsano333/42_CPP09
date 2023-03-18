@@ -79,6 +79,15 @@ std::vector<size_t>* insert_sort_in_vector(std::vector<size_t>* vec)
     std::vector<size_t>::const_iterator end = vec->end();
     std::vector<size_t>::iterator insert_ite;
 
+    {
+        cout << "insert sort test before:" << endl;
+        for (size_t i=0;i<vec->size();i++)
+        {
+            cout << (*vec)[i] ;
+            cout << " ";
+        }
+            cout << endl;
+    }
     if (vec->size() <= 1)
     {
         return vec;
@@ -98,6 +107,11 @@ std::vector<size_t>* insert_sort_in_vector(std::vector<size_t>* vec)
         {
             if ((*tmp)[i-1] < *ite && *ite <= (*tmp)[i])
                 break;
+            else if ((*tmp)[i-1] > *ite)
+            {
+                i--;
+                break;
+            }
         }
 
         insert_ite = tmp->begin();
@@ -106,6 +120,15 @@ std::vector<size_t>* insert_sort_in_vector(std::vector<size_t>* vec)
         ite++;
     }
     delete vec;
+    {
+        cout << "insert sort test after:" << endl;
+        for (size_t i=0;i<tmp->size();i++)
+        {
+            cout << (*tmp)[i] ;
+            cout << " ";
+        }
+            cout << endl;
+    }
     return (tmp);
 }
 
@@ -176,7 +199,6 @@ std::vector<size_t>* PmergeMe::merge_sort_in_vector(std::vector<size_t>* vec1, s
 
 void PmergeMe::make_divided_vector(std::vector<std::vector<size_t>* >& divided, size_t size)
 {
-    cout << "make divided vector:" << size << endl;
     for(size_t i=0;i<divided.size();i++)
     {
         divided[i] = new std::vector<size_t>;
@@ -206,58 +228,27 @@ void PmergeMe::repeat_merge_sort_in_vector(std::vector<std::vector<size_t>* >& d
 {
     size_t base_size = this->vector.size();
     std::vector<size_t>* tmp;
-    cout << "repeat_merge_sort_in_vector No.1 base_size=" << base_size << ", first_size=" << (*divided.begin())->size() << endl;
     std::vector<std::vector<size_t>* >::iterator end = divided.end();
     std::vector<std::vector<size_t>* >::iterator ite = divided.begin();
     while (base_size != (*divided.begin())->size())
     {
         std::vector<std::vector<size_t>* >::iterator tmp_ite;
-        cout << "repeat_merge_sort_in_vector No.2 base_size=" << base_size << ", first_size=" << (*divided.begin())->size() << endl;
         while(ite != end && (*ite)->size() == 0)
             ite++;
-        cout << "repeat_merge_sort_in_vector No.3 end=" << &end << endl;
         tmp_ite = ite;
         if (ite != end)
             ite++;
         while(ite != end && (*ite)->size() == 0)
             ite++;
-        cout << "repeat_merge_sort_in_vector No.4 tmp_ite=" << &tmp_ite << ", ite=" << &ite  << endl;
         if (ite != end)
         {
-            {
-                std::vector<std::vector<size_t>* >::iterator end2 = divided.end();
-                std::vector<std::vector<size_t>* >::iterator ite2 = divided.begin();
-                while(ite2 != end2)
-                {
-                    cout << "test:*ite1 size()=" << (*ite2)->size() << endl;
-                    ite2++;
-                }
-
-            }
             tmp = this->merge_sort_in_vector(*tmp_ite, *ite);
             (*ite)->clear();
-            //(*tmp_ite)->clear();
-            //delete *ite;
-            //*ite = NULL;
-            cout << "repeat_merge_sort_in_vector No.5 *ite=" << *ite << ", *tmp_ite=" << *tmp_ite << endl;
-            cout << "repeat_merge_sort_in_vector No.5-2 *ite_size=" << (*ite)->size() << ", *tmp_ite=" << (*tmp_ite)->size() << endl;
-            //while(1)
-            {
-                std::vector<std::vector<size_t>* >::iterator end2 = divided.end();
-                std::vector<std::vector<size_t>* >::iterator ite2 = divided.begin();
-                while(ite2 != end2)
-                {
-                    cout << "test:*ite2 size()=" << (*ite2)->size() << endl;
-                    ite2++;
-                }
-
-            }
             delete *tmp_ite;
             *tmp_ite = tmp;
         }
         else
             ite = divided.begin();
-        cout << "repeat_merge_sort_in_vector No.6 base_size=" << base_size << ", first_size=" << (*divided.begin())->size() << endl;
     }
     this->sorted_vector = divided[0];
 }
