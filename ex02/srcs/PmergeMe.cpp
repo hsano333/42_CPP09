@@ -18,12 +18,12 @@ PmergeMe::~PmergeMe()
 }
 PmergeMe::PmergeMe(const PmergeMe& merge) : sorted_vector(NULL) , sorted_list(NULL)
 {
-    *this = merge;
+    this->operator=(merge);
 }
 
 PmergeMe& PmergeMe::operator=(const PmergeMe& pmerge)
 {
-    if (this != &pmerge)
+    if (this == &pmerge)
         return (*this);
 
     this->vector.clear();
@@ -38,7 +38,7 @@ PmergeMe& PmergeMe::operator=(const PmergeMe& pmerge)
     }
     for (; ite_l != end_l; ite_l++)
     {
-        this->vector.push_back(*ite_l);
+        this->list.push_back(*ite_l);
     }
 
     if (pmerge.sorted_vector)
@@ -251,12 +251,20 @@ clock_t PmergeMe::sort_in_vector(size_t size)
 
     begin_time = clock();
 
+    (void)size;
     std::vector<std::vector<size_t>* > divided(this->vector.size()/size + 1);
     make_divided_vector(divided, size);
     std::transform(divided.begin(),divided.end(),divided.begin(), insert_sort_in_vector);
-
     repeat_merge_sort_in_vector(divided);
     std::transform(++divided.begin(),divided.end(),divided.begin(), clear_vector);
+    /*
+    for (size_t i=0;i<divided.size();i++)
+    {
+        delete divided[i];
+        divided[i] = NULL;
+
+    }
+    */
 
     end_time = clock();
     return (end_time - begin_time);
@@ -268,6 +276,8 @@ std::list<size_t>* insert_sort_in_list(std::list<size_t>* lst)
     std::list<size_t>::const_iterator end = lst->end();
     std::list<size_t>::iterator insert_ite;
 
+    //string tmp2 = "insert sort before:";
+    //PmergeMe::print_list(tmp2, *lst);
     if (lst->size() <= 1)
     {
         return lst;
@@ -282,30 +292,47 @@ std::list<size_t>* insert_sort_in_list(std::list<size_t>* lst)
     ++ite;
     while(ite != end)
     {
+        //cout << "insert sort in list No.1" << endl;
         std::list<size_t>::iterator ite_sorted = tmp->begin();
         std::list<size_t>::iterator pre_ite_sorted = tmp->begin();
         std::list<size_t>::const_iterator end_sorted = tmp->end();
+        //cout << "insert sort in list No.2 ite_sorted=" << &ite_sorted << ", end_sorted:" << &end_sorted << endl;
         while (ite_sorted != end_sorted)
         {
+            //cout << "insert sort in list No.2 ite_sorted=" << &ite_sorted << ", end_sorted:" << &end_sorted << endl;
             pre_ite_sorted = ite_sorted;
-            ite_sorted++;
+            ++ite_sorted;
+            //cout << "insert sort in list No.4 pre=" << *pre_ite_sorted << ", ite_sorted:" << *ite_sorted << ",*ite=" << *ite << endl;
             if (*pre_ite_sorted < *ite && *ite <= *ite_sorted)
             {
+                //cout << "insert sort in list No.4 pre=" << *pre_ite_sorted << ", ite_sorted:" << *ite_sorted << ",*ite=" << *ite << endl;
                 break;
             }
             else if (*pre_ite_sorted > *ite)
             {
-                --pre_ite_sorted++;
+                //cout << "insert sort in list No.5 pre=" << *pre_ite_sorted << ", ite_sorted:" << *ite_sorted << ",*ite=" << *ite << endl;
+                --ite_sorted;
                 break;
             }
-            ite_sorted++;
+                //cout << "insert sort in list No.6 pre=" << *pre_ite_sorted << ", ite_sorted:" << *ite_sorted << ",*ite=" << *ite << endl;
+            //++ite_sorted;
+            //cout << "insert sort in list No.6 ite_sorted=" << &ite_sorted << ", end:" << &end_sorted << endl;
+            //++ite_sorted;
+            //ite_sorted = ite_sorted + 2;
+            //cout << "insert sort in list No.7 ite_sorted=" << &ite_sorted << ", end:" << &end_sorted << endl;
         }
         //insert_ite = tmp->begin();
         //insert_ite += i;
         tmp->insert(ite_sorted, *ite);
+        //cout << "insert sort in list No.4 ite_sorted=" << &ite_sorted << ", end_sorted:" << &end_sorted << endl;
+         ite_sorted = tmp->begin();
+        end_sorted = tmp->end();
+        //cout << "insert sort in list No.5 ite=" << &ite << ", end=" << &end << endl;
         ite++;
     }
     delete lst;
+    //string tmp1 = "insert sort after:";
+    //PmergeMe::print_list(tmp1, *tmp);
     return (tmp);
 }
 
@@ -453,6 +480,17 @@ clock_t PmergeMe::sort_in_list(size_t size)
 clock_t PmergeMe::sort(Container container, size_t size)
 {
     clock_t clock = 0;
+    if (this->sorted_vector)
+    {
+        delete this->sorted_vector;
+        this->sorted_vector = NULL;
+    }
+    if (this->sorted_list)
+    {
+        delete this->sorted_list;
+        this->sorted_list = NULL;
+    }
+
     if (container == VECTOR)
     {
         clock = sort_in_vector(size);
@@ -492,15 +530,14 @@ void PmergeMe::print_all(Container container)
 void PmergeMe::print_all_sorted(Container container)
 {
     string tmp = "";
-    if (container == VECTOR)
+    if (container == VECTOR && this->sorted_vector)
     {
         print_vector(tmp, *(this->sorted_vector));
     }
-    else if(container == LIST)
+    else if(container == LIST && this->sorted_list)
     {
         print_list(tmp, *(this->sorted_list));
     }
-    cout << endl;
 }
 
 bool PmergeMe::check_sort()
