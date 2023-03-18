@@ -6,7 +6,7 @@
 /*   By: hsano <hsano@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 17:08:36 by hsano             #+#    #+#             */
-/*   Updated: 2023/03/18 22:23:40 by sano             ###   ########.fr       */
+/*   Updated: 2023/03/18 22:25:35 by sano             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ int main(int argc, char **argv)
     cout << pmerge.size() << " elements with std::[List]   : ";
     cout << std::fixed << std::setprecision(0) << list_clock * unit << " us" << endl;
 
+    /*
     PmergeMe pmerge2 = PmergeMe(pmerge);
     cout << "vetor2" << endl;
     pmerge2.print_all_sorted(VECTOR);
@@ -95,5 +96,6 @@ int main(int argc, char **argv)
     cout << "list3" << endl;
     pmerge3.print_all_sorted(LIST);
     pmerge3.sort(LIST,size);
+    */
     
 }

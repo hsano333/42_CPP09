@@ -13,8 +13,7 @@ OBJS	:= $(SRCS:.cpp=.o)
 OBJECTS	:= $(addprefix $(OBJDIR)/, $(SRC:.cpp=.o))
 DEPS	:= $(OBJECTS:.o=.d)
 
-CXX := c++ -fsanitize=leak
-#CXX			:= c++
+CXX			:= c++
 CXXFLAGS	:= -Wall -Wextra -Werror -std=c++98
 
 all:
