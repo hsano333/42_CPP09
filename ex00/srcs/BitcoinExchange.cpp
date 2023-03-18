@@ -28,19 +28,11 @@ BitcoinExchange::~BitcoinExchange()
 BitcoinExchange::BitcoinExchange(const BitcoinExchange& bce)
 {
     *this = bce;
-    /*
-    map<time_t, string>::const_iterator ite = bce.database.begin();
-    map<time_t, string>::const_iterator end = bce.database.end();
-    for(; ite != end;ite++)
-    {
-        database.insert(*ite);
-    }
-    */
 }
 
 BitcoinExchange& BitcoinExchange::operator=(const BitcoinExchange &bce)
 {
-    if (this != &bce)
+    if (this == &bce)
         return (*this);
     this->database.clear();
     map<time_t, string>::const_iterator ite = bce.database.begin();
@@ -83,19 +75,15 @@ bool BitcoinExchange::is_valid_date(int year, int month, int day)
     int last_day_array[] = {0,31,29,31,30,31,30,31,31,30,31,30,31};
     int last_day = last_day_array[month];
 
-    //cout << "is_valid_date No.1 year=" << year << ", month=" << month << ", day" << day << endl;
     if (day > last_day)
         return (false);
-    //cout << "is_valid_date No.2 year=" << year << ", month=" << month << ", day" << day << endl;
     if (month == 2 && day == 29)
     {
-    //cout << "is_valid_date No.3 year=" << year << ", month=" << month << ", day" << day << ",leap year=" << is_leap_year(year) << endl;
          if(is_leap_year(year))
              return (true);
          else
              return (false);
     }
-    //cout << "is_valid_date No.4 year=" << year << ", month=" << month << ", day" << day << endl;
     return (true);
 }
 
@@ -191,6 +179,7 @@ void BitcoinExchange::load_database()
             continue;
         database.insert(make_pair(tmp_date, tmp_value));
     }
+    dbfile.close();
 }
 
 time_t BitcoinExchange::search_date(time_t date)
@@ -222,18 +211,9 @@ string BitcoinExchange::calc(string rate, string input_value)
     stringstream ss;
     ss.clear();
 
-    //cout << "calc() No.1" << endl;
     if (rate.find(".") || input_value.find("."))
     {
-        //try{
-        //cout << "calc() No.2" << endl;
             double rate_val = strtod(rate.c_str(), &endptr);
-        //cout << "calc() No.3:" << rate_val << endl;
-            //cout << rate_val << endl;
-            //if (rate_val >= max)
-            //{
-                //throw std::range_error("Error: too large a number. No.3");
-            //}
             if (errno == ERANGE)
                 throw std::range_error("Error: out of range");
             else if (*endptr != '\0')
@@ -242,7 +222,7 @@ string BitcoinExchange::calc(string rate, string input_value)
                 throw std::range_error("Error: not a positive number.");
             double input_val = strtod(input_value.c_str(), &endptr);
             if (input_val >= 1000)
-                throw std::range_error("Error: too large a number. No.4");
+                throw std::range_error("Error: too large a number.");
             else if (errno == ERANGE)
                 throw std::range_error("Error: out of range");
             else if (*endptr != '\0')
@@ -251,17 +231,10 @@ string BitcoinExchange::calc(string rate, string input_value)
                 throw std::range_error("Error: not a positive number.");
             ss  << std::fixed << std::setprecision(3) << rate_val * input_val;
             return (ss.str());
-        //}catch (exception &e){
-            //cout << e.what() << endl;
-        //}
-
     }
     else
     {
-        //try{
             long rate_val = strtol(rate.c_str(), &endptr, base);
-            //if (rate_val >= max)
-                //throw std::range_error("Error: too large a number. No.1");
             if (errno == ERANGE)
                 throw std::range_error("Error: out of range");
             else if (*endptr != '\0')
@@ -279,10 +252,6 @@ string BitcoinExchange::calc(string rate, string input_value)
                 throw std::range_error("Error: not a positive number.");
             ss  << std::fixed << std::setprecision(3) << rate_val * input_val;
             return (ss.str());
-        //}catch (exception &e){
-            //cout << e.what() << endl;
-        //}
-
     }
     return (rval);
 }
@@ -319,7 +288,6 @@ void BitcoinExchange::display_exchanged_rate(std::string input_file_path)
             continue;
         indicated_date = this->search_date(input_date);
         rate_str = this->database.at(indicated_date);
-        //cout << "indicated_date:" << indicated_date << ", rate_str=" << rate_str << endl;
         try
         {
             exchanged_rate = this->calc(rate_str, input_value);
@@ -330,5 +298,5 @@ void BitcoinExchange::display_exchanged_rate(std::string input_file_path)
             cout << e.what() << endl;
         }
     }
-    //(void)input_file;
+    infile.close();
 }
