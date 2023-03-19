@@ -6,7 +6,7 @@
 /*   By: hsano <hsano@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 17:08:36 by hsano             #+#    #+#             */
-/*   Updated: 2023/03/18 22:25:35 by sano             ###   ########.fr       */
+/*   Updated: 2023/03/19 16:01:22 by hsano            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,6 @@ int main(int argc, char **argv)
     pmerge.print_all(VECTOR);
     clock_t vector_clock = pmerge.sort(VECTOR, size);
     clock_t list_clock = pmerge.sort(LIST, size);
-    //clock_t list_clock = 0;
     cout << "After :    ";
     pmerge.print_all_sorted(VECTOR);
     pmerge.check_sort();
@@ -81,21 +80,4 @@ int main(int argc, char **argv)
     cout << "Time to process a range of ";
     cout << pmerge.size() << " elements with std::[List]   : ";
     cout << std::fixed << std::setprecision(0) << list_clock * unit << " us" << endl;
-
-    /*
-    PmergeMe pmerge2 = PmergeMe(pmerge);
-    cout << "vetor2" << endl;
-    pmerge2.print_all_sorted(VECTOR);
-    cout << "list2" << endl;
-    pmerge2.print_all_sorted(LIST);
-    pmerge2.sort(LIST,size);
-    PmergeMe pmerge3;
-    pmerge3 = pmerge;
-    cout << "vetor3" << endl;
-    pmerge3.print_all_sorted(VECTOR);
-    cout << "list3" << endl;
-    pmerge3.print_all_sorted(LIST);
-    pmerge3.sort(LIST,size);
-    */
-    
 }

@@ -14,7 +14,6 @@ using std::endl;
 using std::fstream;
 using std::exception;
 using std::stringstream;
-//using std::stoi;
 
 BitcoinExchange::BitcoinExchange()
 {
@@ -179,7 +178,6 @@ void BitcoinExchange::load_database()
 
 time_t BitcoinExchange::search_date(time_t date)
 {
-    //time_t indicated_date;
     std::map<std::time_t , std::string>::iterator ite = this->database.begin();
     std::map<std::time_t , std::string>::iterator end = this->database.end();
     for (; ite != end; ite++)
@@ -214,8 +212,8 @@ string BitcoinExchange::calc(string rate, string input_value)
                 throw std::range_error("Error: out of range");
             else if (*endptr != '\0')
                 throw std::exception();
-            else if (rate_val < 0)
-                throw std::range_error("Error: not a positive number.");
+            //else if (rate_val < 0)
+                //throw std::range_error("Error: not a positive number.");
             double input_val = strtod(input_value.c_str(), &endptr);
             if (input_val >= 1000)
                 throw std::range_error("Error: too large a number.");
@@ -286,15 +284,6 @@ void BitcoinExchange::display_exchanged_rate(std::string input_file_path)
         try
         {
             rate_str = this->database.at(indicated_date);
-        }
-        catch (std::exception &e)
-        {
-            cout << "map?:" << indicated_date << endl;
-            cout << e.what() << endl;
-            cout << "map?" << endl;
-        }
-        try
-        {
             exchanged_rate = this->calc(rate_str, input_value);
             cout << buf.substr(0, buf.find(delimiter)) << " => " << input_value << " = " << exchanged_rate << endl;
         }

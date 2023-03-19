@@ -272,8 +272,6 @@ std::list<size_t>* insert_sort_in_list(std::list<size_t>* lst)
     std::list<size_t>::const_iterator end = lst->end();
     std::list<size_t>::iterator insert_ite;
 
-    //string tmp2 = "insert sort before:";
-    //PmergeMe::print_list(tmp2, *lst);
     if (lst->size() <= 1)
     {
         return lst;
@@ -288,47 +286,29 @@ std::list<size_t>* insert_sort_in_list(std::list<size_t>* lst)
     ++ite;
     while(ite != end)
     {
-        //cout << "insert sort in list No.1" << endl;
         std::list<size_t>::iterator ite_sorted = tmp->begin();
         std::list<size_t>::iterator pre_ite_sorted = tmp->begin();
         std::list<size_t>::const_iterator end_sorted = tmp->end();
-        //cout << "insert sort in list No.2 ite_sorted=" << &ite_sorted << ", end_sorted:" << &end_sorted << endl;
         while (ite_sorted != end_sorted)
         {
-            //cout << "insert sort in list No.2 ite_sorted=" << &ite_sorted << ", end_sorted:" << &end_sorted << endl;
             pre_ite_sorted = ite_sorted;
             ++ite_sorted;
-            //cout << "insert sort in list No.4 pre=" << *pre_ite_sorted << ", ite_sorted:" << *ite_sorted << ",*ite=" << *ite << endl;
             if (*pre_ite_sorted < *ite && *ite <= *ite_sorted)
             {
-                //cout << "insert sort in list No.4 pre=" << *pre_ite_sorted << ", ite_sorted:" << *ite_sorted << ",*ite=" << *ite << endl;
                 break;
             }
             else if (*pre_ite_sorted > *ite)
             {
-                //cout << "insert sort in list No.5 pre=" << *pre_ite_sorted << ", ite_sorted:" << *ite_sorted << ",*ite=" << *ite << endl;
                 --ite_sorted;
                 break;
             }
-                //cout << "insert sort in list No.6 pre=" << *pre_ite_sorted << ", ite_sorted:" << *ite_sorted << ",*ite=" << *ite << endl;
-            //++ite_sorted;
-            //cout << "insert sort in list No.6 ite_sorted=" << &ite_sorted << ", end:" << &end_sorted << endl;
-            //++ite_sorted;
-            //ite_sorted = ite_sorted + 2;
-            //cout << "insert sort in list No.7 ite_sorted=" << &ite_sorted << ", end:" << &end_sorted << endl;
         }
-        //insert_ite = tmp->begin();
-        //insert_ite += i;
         tmp->insert(ite_sorted, *ite);
-        //cout << "insert sort in list No.4 ite_sorted=" << &ite_sorted << ", end_sorted:" << &end_sorted << endl;
-         ite_sorted = tmp->begin();
+        ite_sorted = tmp->begin();
         end_sorted = tmp->end();
-        //cout << "insert sort in list No.5 ite=" << &ite << ", end=" << &end << endl;
         ite++;
     }
     delete lst;
-    //string tmp1 = "insert sort after:";
-    //PmergeMe::print_list(tmp1, *tmp);
     return (tmp);
 }
 
@@ -379,21 +359,6 @@ std::list<size_t>* PmergeMe::merge_sort_in_list(std::list<size_t>* lst1, std::li
             }
         }
     }
-    /*
-    while(ite != end)
-    {
-        size_t i = 0;
-        for (i = 1;i<tmp->size();i++)
-        {
-            if (tmp->size() < 2)
-                break;
-            if ((*tmp)[i-1] < *ite && *ite <= (*tmp)[i])
-                break;
-        }
-        tmp->insert(lst.begin(), i);
-        ite++;
-    }
-    */
     return (tmp);
 }
 
@@ -548,8 +513,6 @@ bool PmergeMe::check_sort()
     std::vector<size_t>::const_iterator end_c = check.end();
     std::vector<size_t>::const_iterator ite_v = this->sorted_vector->begin();
     std::vector<size_t>::const_iterator end_v = this->sorted_vector->end();
-    //std::vector<size_t>::const_iterator ite_o = this->vector.begin();
-    //std::vector<size_t>::const_iterator end_o = this->vector.end();
     while (ite_c != end_c && ite_v != end_v)
     {
         if (*ite_c != *ite_v)
