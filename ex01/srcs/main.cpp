@@ -6,7 +6,6 @@ using std::string;
 using std::stack;
 using std::cout;
 using std::endl;
-using std::vector;
 
 /*
 #include <stdio.h>

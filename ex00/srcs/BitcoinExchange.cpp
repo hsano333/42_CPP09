@@ -95,7 +95,6 @@ time_t BitcoinExchange::convert_date(string buf, string delimiter)
     if (year_pos == string::npos)
     {
         cout << "Error: bad input => " << buf << endl;
-        //cout << "Warning database file(data.csv):invalid format. This line is ignored:[" << buf << "]" << endl;
         return (0);
     }
     size_t month_pos = buf.find("-", year_pos + 1);
@@ -124,7 +123,6 @@ time_t BitcoinExchange::convert_date(string buf, string delimiter)
         day = strtol(buf.substr(month_pos+1, day_pos - month_pos-1).c_str(), &endptr, base);
         if (errno == ERANGE || *endptr != '\0')
             throw std::exception();
-        //cout << "year:" << year << ", month=" << month << ", day=" << day << endl;
         if (year < 1900 || year > 3000)
             throw std::exception();
         if (month <= 0 || month > 12)
@@ -143,9 +141,6 @@ time_t BitcoinExchange::convert_date(string buf, string delimiter)
     tmp_date.tm_year = year - 1900;
     tmp_date.tm_mon = month - 1;
     tmp_date.tm_mday = day;
-
-    //if (mktime(&tmp_date) < 0)
-        //cout << "mktime error:" << buf << endl;
     return (mktime(&tmp_date));
 }
 
@@ -193,7 +188,8 @@ time_t BitcoinExchange::search_date(time_t date)
             break;
         else if ((*ite).first > date)
         {
-            ite--;
+            if (ite != this->database.begin())
+                ite--;
             break;
         }
     }
@@ -218,7 +214,7 @@ string BitcoinExchange::calc(string rate, string input_value)
                 throw std::range_error("Error: out of range");
             else if (*endptr != '\0')
                 throw std::exception();
-            else if (rate_val <= 0)
+            else if (rate_val < 0)
                 throw std::range_error("Error: not a positive number.");
             double input_val = strtod(input_value.c_str(), &endptr);
             if (input_val >= 1000)
@@ -287,7 +283,16 @@ void BitcoinExchange::display_exchanged_rate(std::string input_file_path)
         if (input_value == "")
             continue;
         indicated_date = this->search_date(input_date);
-        rate_str = this->database.at(indicated_date);
+        try
+        {
+            rate_str = this->database.at(indicated_date);
+        }
+        catch (std::exception &e)
+        {
+            cout << "map?:" << indicated_date << endl;
+            cout << e.what() << endl;
+            cout << "map?" << endl;
+        }
         try
         {
             exchanged_rate = this->calc(rate_str, input_value);
