@@ -36,8 +36,6 @@ class PmergeMe
         std::list<size_t> *sorted_list;
         clock_t sort_in_vector(size_t size);
         clock_t sort_in_list(size_t size);
-        //std::vector<size_t>* insert_sort_in_vector(const std::vector<size_t> &vec );
-        //void insert_sort_in_vector(const std::vector<size_t> &vec );
         std::vector<size_t>* merge_sort_in_vector(std::vector<size_t> *vec1, std::vector<size_t> *vec2);
         void make_divided_vector(std::vector<std::vector<size_t>* >&divided, size_t size);
         void repeat_merge_sort_in_vector(std::vector<std::vector<size_t>* >&divided);
