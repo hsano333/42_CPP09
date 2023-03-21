@@ -20,7 +20,11 @@ int main(int argc, char **argv)
     ssize_t result = 0;
     try{
         string tmp;
-        if (argc == 2)
+        if (argc == 1)
+		{
+			throw std::exception();
+		}
+		else if (argc == 2)
         {
             tmp = string(argv[1]);
             result = rpn.calc(tmp);

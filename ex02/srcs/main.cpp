@@ -6,7 +6,7 @@
 /*   By: hsano <hsano@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 17:08:36 by hsano             #+#    #+#             */
-/*   Updated: 2023/03/20 16:00:17 by hsano            ###   ########.fr       */
+/*   Updated: 2023/03/21 19:18:15 by hsano            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,14 @@ int main(int argc, char **argv)
     double unit =  (1000000 / CLOCKS_PER_SEC);
     if (argc < 8)
         size = 1;
-    else if (size < 128)
-        size = argc / 4;
-    else if (size < 65536)
+    else if (argc < 512)
+        size = argc / 8;
+    else if (argc < 8192)
+        size = argc / 32;
+    else if (argc < 65536)
         size = argc / 128;
     else
-        size = argc / 1024;
+        size = argc / 512;
 
     PmergeMe pmerge;
     int i = 1;
